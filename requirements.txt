@@ -2,3 +2,6 @@ notebook
 pandas
 praw
 DateTime
+nltk
+wordcloud
+textblob
