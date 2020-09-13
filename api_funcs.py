@@ -7,7 +7,7 @@ from keys import client_id, client_secret, username
 
 reddit = praw.Reddit( client_id=client_id,
                       client_secret=client_secret,
-                      user_agent=f'android:my_app:v1 (by /u/{username})')
+                      user_agent=f'web-app:sentimentAnalysis:v1 (by /u/{username})')
 
 def subreddit_posts(topic, limit):     
     ''' params string topic: the name of the subreddit
@@ -18,9 +18,9 @@ def subreddit_posts(topic, limit):
     for index, post in enumerate(data.hot(limit=limit)):
         posts.append([post.title, "https://www.reddit.com" + post.permalink, post.selftext, post.score, post.created_utc, index])
 
-    #Converting into DataFrame
+    # Convert to DataFrame
     posts = pd.DataFrame(posts, columns=['Title', 'URL', 'Body', 'Upvotes', 'Time', 'Key'])
-    #Changing from utc time to standard timestamp
+    # Convert from UTC to standard timestamp
     posts.Time = posts.Time.apply(lambda x: pd.to_datetime(datetime.datetime.fromtimestamp(x)))
     
     return posts
@@ -55,7 +55,7 @@ def replies_to_posts(posts_dataframe):
     urls = posts_dataframe.URL.tolist()
     tupules = list(zip(keys, urls))
 
-    #Now we generate our comments dataframe using list comprehensions!
+    # Generate 'Comments' data-frame using list comprehensions
     comments = pd.concat([collect_replies(x[0], x[1]) for x in tupules])
     comments.Time = comments.Time.apply(lambda x: pd.to_datetime(datetime.datetime.fromtimestamp(x)))
     return comments
