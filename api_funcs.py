@@ -10,18 +10,23 @@ reddit = praw.Reddit( client_id=client_id,
                       user_agent=f'web-app:sentimentAnalysis:v1 (by /u/{username})')
 
 def subreddit_posts(topic, limit):     
-    ''' params string topic: the name of the subreddit
-        params integer limit: the maximum number of posts to return
-        returns: dataframe '''
-    data = reddit.subreddit(topic)
+    
+    topic = reddit.subreddit('EpicGamesPC')
+
+    # Select the top 500 posts, with their title, URL, body, upvotes, timestamp, 
+    # and an index that serves as a key between the posts and the comments we collect later.
     posts = []
-    for index, post in enumerate(data.hot(limit=limit)):
+    for index, post in enumerate(topic.top(limit=limit)):
         posts.append([post.title, "https://www.reddit.com" + post.permalink, post.selftext, post.score, post.created_utc, index])
 
     # Convert to DataFrame
     posts = pd.DataFrame(posts, columns=['Title', 'URL', 'Body', 'Upvotes', 'Time', 'Key'])
+
     # Convert from UTC to standard timestamp
     posts.Time = posts.Time.apply(lambda x: pd.to_datetime(datetime.datetime.fromtimestamp(x)))
+
+    # The first post is a sticky, so we can drop it
+   ## posts = posts.iloc[1:]
     
     return posts
 
