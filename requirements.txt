@@ -7,3 +7,4 @@ wordcloud
 textblob
 sklearn
 import_ipynb
+seaborn
