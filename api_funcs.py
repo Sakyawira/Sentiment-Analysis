@@ -10,28 +10,20 @@ reddit = praw.Reddit( client_id=client_id,
                       client_secret=client_secret,
                       user_agent=f'web-app:sentimentAnalysis:v1 (by /u/{username})')
 
+from psaw import PushshiftAPI
 
 def subreddit_posts(_topic, _limit):     
     
-    # Get the Sub-Reddit
-    topic = reddit.subreddit(_topic)
-
-    # Select the top <limit> posts, with their title, URL, body, upvotes, timestamp, 
-    # and an index that serves as a key between the posts and the comments we collect later.
-    posts = []
-    for index, post in enumerate(topic.top(limit=_limit)):
-        posts.append([post.title, "https://www.reddit.com" + post.permalink, post.selftext, post.score, post.created_utc, index])
-
-    # Convert to DataFrame
-    posts = pd.DataFrame(posts, columns=['Title', 'URL', 'Body', 'Upvotes', 'Time', 'Key'])
+    api = PushshiftAPI()
+    gen = api.search_submissions(limit=_limit, subreddit=_topic,filter=['created_utc','title', 'full_link', 'selftext', 'upvote_ratio', 'created'])
+    #gen = api.search_submissions(limit=100)
+    #gen = api.search_submissions(limit=100, subreddit='EpicGamesPC')
+    df = pd.DataFrame([obj.d_ for obj in gen])
 
     # Convert from UTC to standard timestamp
-    posts.Time = posts.Time.apply(lambda x: pd.to_datetime(datetime.datetime.fromtimestamp(x)))
+    df["Time"] = df.created_utc.apply(lambda x: pd.to_datetime(datetime.datetime.fromtimestamp(x)))
 
-    # The first post is a sticky, so we can drop it
-   ## posts = posts.iloc[1:]
-    
-    return posts
+    return df
 
     
 def collect_replies(key, url):
@@ -60,7 +52,7 @@ def replies_to_posts(posts_dataframe):
     # params pandas dataframe posts_dataframe: the posts dataframe created by the function subreddit_posts
     # returns: comments dataframe
     
-    keys = posts_dataframe.Key.tolist()
+    keys = posts_dataframe.index.tolist()
     urls = posts_dataframe.URL.tolist()
     tupules = list(zip(keys, urls))
 
