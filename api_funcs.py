@@ -5,9 +5,11 @@ import pandas as pd
 
 from keys import client_id, client_secret, username
 
+# Initializing a Reddit Instance
 reddit = praw.Reddit( client_id=client_id,
                       client_secret=client_secret,
                       user_agent=f'web-app:sentimentAnalysis:v1 (by /u/{username})')
+
 
 def subreddit_posts(_topic, _limit):     
     
