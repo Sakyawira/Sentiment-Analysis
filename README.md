@@ -37,3 +37,6 @@ Using our own trained classification module, there seems to be more Negative sen
 
 - ### Analysing Compound Sentiment Score Overtime
 <img src="https://github.com/Sakyawira/Sentiment-Analysis/blob/master/images/vdrOverTime.PNG?raw=true"/>
+
+## Conclusion
+It is safe to conclude that despite their rough start, Epic Games Store's sentiment continue to rise to the positive side.
