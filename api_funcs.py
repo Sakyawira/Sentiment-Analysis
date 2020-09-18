@@ -12,15 +12,14 @@ reddit = praw.Reddit( client_id=client_id,
 
 from psaw import PushshiftAPI
 
-def subreddit_posts(_topic, _limit):     
+def subreddit_posts(_topic):     
     
     api = PushshiftAPI()
     gen = api.search_submissions(subreddit=_topic,filter=['created_utc','title', 'full_link', 'selftext', 'upvote_ratio', 'created'])
-    #gen = api.search_submissions(limit=100)
-    #gen = api.search_submissions(limit=100, subreddit='EpicGamesPC')
     df = pd.DataFrame([obj.d_ for obj in gen])
 
     # Convert from UTC to standard timestamp
+    
     df["Time"] = df.created_utc.apply(lambda x: pd.to_datetime(datetime.datetime.fromtimestamp(x)))
 
     return df
