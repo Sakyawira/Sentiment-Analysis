@@ -4,7 +4,7 @@
 My Business case is a particular game company wishes to investigate the popularity of Epic Games Store. The video game company plans to use the results of the investigation to inform future business decisions (whether they will make an exclusivity deal with Epic Games Store for their upcoming title). We approached the problem by analysing sentiments of posts in the Epic Games Store subreddit (r/EpicGamesPC: https://www.reddit.com/r/EpicGamesPC/ ).
 
 ## Data Collection
-Data collection is done using Reddit API. PushShift API was also used to bypass the 1000 submissions limit of the Reddit API. A total of 9727 posts are collected, and from those 64311 comments are collected.
+Data collection is done using Reddit API. PushShift API was also used to bypass the 1000 submissions limit of the Reddit API. A total of 9727 posts are collected, and from those, 64311 comments are collected.
 
 <img src="https://github.com/Sakyawira/Sentiment-Analysis/blob/master/images/apiCalls.PNG?raw=true"/>
 
